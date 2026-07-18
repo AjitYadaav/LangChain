@@ -498,58 +498,103 @@ The semantic understanding comes from the embedding model.
 
 ---
 
-# 14. Interview Questions
+# Interview Questions
 
 ### Q1. What is the Models component in LangChain?
+
+The Models component provides a unified interface to interact with different AI models (LLMs, Chat Models, and Embedding Models). It abstracts provider-specific APIs, allowing developers to switch between models like OpenAI, Gemini, Anthropic, or Hugging Face with minimal code changes.
 
 ---
 
 ### Q2. Difference between LLMs and Chat Models?
 
+| LLMs | Chat Models |
+|------|-------------|
+| Accept plain text as input | Accept structured messages (System, Human, AI) |
+| Mainly designed for text completion | Designed for conversational AI |
+| Output is generated text | Output is conversational responses with context |
+| Example: GPT-3 Completion | Example: ChatGPT, Gemini Chat |
+
 ---
 
 ### Q3. What is an Embedding?
+
+An embedding is a dense numerical vector that represents the semantic meaning of text. Similar texts produce similar vectors, making it easier for computers to compare meanings instead of exact words.
 
 ---
 
 ### Q4. Why do we need Embeddings?
 
+Embeddings allow computers to measure semantic similarity between texts. They are used for:
+- Semantic Search
+- Document Retrieval
+- Recommendation Systems
+- Clustering
+- RAG applications
+
 ---
 
-### Q5. Difference between embed_query() and embed_documents()?
+### Q5. Difference between `embed_query()` and `embed_documents()`?
+
+| `embed_query()` | `embed_documents()` |
+|-----------------|---------------------|
+| Converts a single query into an embedding | Converts multiple documents into embeddings |
+| Used during search | Used while indexing documents |
+| Returns one vector | Returns a list of vectors |
 
 ---
 
 ### Q6. Explain Semantic Search.
 
+Semantic Search retrieves information based on the **meaning** of the query rather than exact keyword matches. It compares embeddings of the query with document embeddings and returns the most semantically similar documents.
+
 ---
 
 ### Q7. What is Cosine Similarity?
+
+Cosine Similarity is a metric used to measure how similar two vectors are by calculating the cosine of the angle between them.
+
+- Value = **1** → Identical meaning
+- Value = **0** → Unrelated
+- Value = **-1** → Opposite direction
+
+It is widely used to find the most relevant documents in vector databases.
 
 ---
 
 ### Q8. Difference between Closed Source and Open Source Models?
 
+| Closed Source | Open Source |
+|---------------|-------------|
+| Model weights are private | Model weights are publicly available |
+| Accessed through APIs | Can be downloaded and run locally |
+| Limited customization | Can be fine-tuned and modified |
+| Examples: GPT-4, Gemini, Claude | Examples: Llama, Mistral, Falcon |
+
 ---
 
 ### Q9. Why is Hugging Face popular?
+
+Hugging Face is a platform that hosts thousands of pre-trained AI models, datasets, and ML tools. It enables developers to easily discover, download, fine-tune, and deploy models, making AI development faster and more accessible.
 
 ---
 
 ### Q10. Why are embeddings required in RAG?
 
+RAG retrieves relevant documents before generating a response. Since vector databases store embeddings rather than raw text, the user's query is converted into an embedding and compared with stored document embeddings. The most similar documents are retrieved and passed to the LLM to generate an accurate answer.
+
 ---
 
-# 15. Key Takeaways
+# Key Takeaways
 
-- LangChain provides a unified interface for AI models.
-- LLMs generate text.
-- Chat Models generate conversational responses.
-- Embedding Models convert text into vectors.
-- Embeddings enable semantic search.
-- Cosine Similarity finds the most relevant document.
-- Hugging Face is a platform for hosting AI models.
-- Semantic search is the retrieval step used in RAG.
+- LangChain provides a unified interface to interact with AI models.
+- LLMs generate text by predicting the next token.
+- Chat Models are optimized for conversational interactions.
+- Embedding Models convert text into semantic vectors.
+- Embeddings power semantic search and document retrieval.
+- Cosine Similarity measures similarity between embeddings.
+- Hugging Face is a popular platform for AI models and datasets.
+- RAG uses embeddings to retrieve relevant context before generation.
 
 ---
 
@@ -562,3 +607,4 @@ The semantic understanding comes from the embedding model.
 - [x] I know how cosine similarity works.
 - [x] I can explain why embeddings are required in RAG.
 - [x] I can explain closed-source vs open-source models.
+
