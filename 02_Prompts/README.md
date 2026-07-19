@@ -6,7 +6,7 @@ A **prompt** is the input or instruction given to a Large Language Model (LLM) t
 
 It tells the model **what task to perform** and **how to perform it**.
 
-**Example:**
+**Example**
 
 ```text
 Summarize the research paper "Attention Is All You Need."
@@ -14,19 +14,21 @@ Summarize the research paper "Attention Is All You Need."
 
 ---
 
-## Why are Prompts Important?
+# Why are Prompts Important?
 
 The quality of an LLM's output depends heavily on the quality of the prompt.
 
-A well-written prompt can:
+A well-designed prompt helps:
+
 - Produce more accurate responses.
 - Reduce ambiguity.
-- Control the style and format of the output.
+- Control the response style.
+- Specify output format.
 - Improve reasoning and task completion.
 
 ---
 
-## Prompt Flow
+# Prompt Flow
 
 ```text
 User
@@ -43,54 +45,98 @@ Generated Response
 
 ---
 
-## Prompt Types
+# Types of Prompts
 
-### 1. Simple Prompt
+## 1. Static Prompt
 
-A direct instruction to the model.
+A static prompt is a fixed instruction sent directly to the LLM.
 
-**Example**
-
-```text
-Explain the Transformer architecture.
-```
-
----
-
-### 2. Instruction Prompt
-
-Specifies exactly what the model should do.
+The user writes the complete prompt manually.
 
 **Example**
 
 ```text
-Summarize the following research paper in 5 bullet points.
+Summarize the paper "Attention Is All You Need."
 ```
 
----
-
-### 3. Contextual Prompt
-
-Provides additional context before asking a question.
-
-**Example**
+### Workflow
 
 ```text
-You are an AI researcher.
-
-Explain Attention Is All You Need to a beginner.
+User
+   │
+   ▼
+Prompt
+   │
+   ▼
+LLM
+   │
+   ▼
+Response
 ```
+
+### Advantages
+
+- Simple
+- Easy to implement
+- Good for quick testing
+
+### Limitations
+
+- No control over output style
+- Depends entirely on how well the user writes the prompt
+- Difficult to maintain in larger applications
 
 ---
 
-## Prompt Components
+## 2. Dynamic Prompt
 
-A prompt may contain:
+A dynamic prompt is generated at runtime by combining a predefined template with user inputs.
+
+Instead of writing the complete prompt, the user provides only the required information.
+
+Example inputs:
+
+- Research Paper
+- Explanation Style
+- Explanation Length
+
+These values are inserted into a Prompt Template before sending it to the LLM.
+
+### Workflow
+
+```text
+User Inputs
+        │
+        ▼
+Prompt Template
+        │
+        ▼
+Generated Prompt
+        │
+        ▼
+LLM
+        │
+        ▼
+Response
+```
+
+### Advantages
+
+- Consistent prompt structure
+- Better output quality
+- Easier to maintain
+- Scalable for real-world applications
+
+---
+
+# Prompt Components
+
+A prompt generally consists of:
 
 - Task
 - Context
 - Constraints
-- Output format
+- Output Format
 
 Example:
 
@@ -101,41 +147,69 @@ Summarize the paper in 100 words using simple language.
 Here,
 
 - Task → Summarize
-- Context → Research paper
-- Constraint → 100 words
-- Output Style → Simple language
+- Context → Research Paper
+- Constraint → 100 Words
+- Output Style → Simple Language
+
+---
+
+# PromptTemplate in LangChain
+
+LangChain provides the `PromptTemplate` class to create reusable and dynamic prompts.
+
+Instead of hardcoding prompts, placeholders are defined inside a template.
+
+Example placeholders:
+
+```text
+{paper_input}
+{style_input}
+{length_input}
+```
+
+At runtime, LangChain replaces these placeholders with actual user inputs before sending the final prompt to the LLM.
 
 ---
 
 # Prompting in LangChain
 
-LangChain sends the prompt to an LLM or Chat Model.
-
-Example:
+Basic invocation:
 
 ```python
 result = model.invoke(user_input)
 ```
 
-where
+For dynamic prompting:
 
-```python
-user_input = st.text_input("Enter your prompt")
+```text
+User Inputs
+      │
+      ▼
+PromptTemplate
+      │
+      ▼
+Formatted Prompt
+      │
+      ▼
+LLM
+      │
+      ▼
+Generated Response
 ```
-
-The entered text becomes the prompt for the model.
 
 ---
 
-# Mini Project
+# Mini Projects
 
-### Research Tool
+## 1. Static Prompt Demo
 
-Built a simple research assistant using:
+Built a simple research assistant where the user directly enters a prompt.
+
+**Tech Stack**
 
 - Streamlit
 - LangChain
-- Google Gemini API
+- Gemini API
 
 Workflow
 
@@ -143,22 +217,51 @@ Workflow
 User
    │
    ▼
-Streamlit UI
-   │
-   ▼
-User enters prompt
+Prompt
    │
    ▼
 LangChain
    │
    ▼
-Gemini 2.5 Flash
+Gemini
    │
    ▼
+Response
+```
+
+---
+
+## 2. Dynamic Prompt Demo
+
+Built a research assistant using `PromptTemplate`.
+
+The application allows users to select:
+
+- Research Paper
+- Explanation Style
+- Explanation Length
+
+These inputs are inserted into a prompt template before sending the request to Gemini.
+
+Workflow
+
+```text
+User
+      │
+      ▼
+Select Inputs
+      │
+      ▼
+PromptTemplate
+      │
+      ▼
+Formatted Prompt
+      │
+      ▼
+Gemini
+      │
+      ▼
 Generated Response
-   │
-   ▼
-Displayed on Streamlit
 ```
 
 ---
@@ -167,12 +270,14 @@ Displayed on Streamlit
 
 ## LLM
 
+Example:
+
 ```python
 GoogleGenerativeAI
 ```
 
-- Takes plain text as input.
-- Returns plain text as output.
+- Accepts plain text input
+- Returns plain text output
 
 ```text
 String
@@ -188,13 +293,15 @@ String
 
 ## Chat Model
 
+Example:
+
 ```python
 ChatGoogleGenerativeAI
 ```
 
-- Works with messages.
-- Supports conversations.
-- Returns an AIMessage object.
+- Works with messages
+- Supports conversations
+- Returns an AIMessage object
 
 ```text
 Human Message
@@ -208,30 +315,33 @@ Chat Model
 AI Message
 ```
 
-Although both may produce similar responses, **Chat Models are preferred for modern LangChain applications** because they support conversations, system instructions, prompt templates, chains, RAG, and agents.
+Although both interfaces can generate similar responses, **Chat Models are preferred** because they integrate naturally with Prompt Templates, LCEL, Chains, RAG, and Agents.
 
 ---
 
 # What I Learned
 
-- What a prompt is.
-- Importance of prompt quality.
-- Different prompt styles.
-- Sending prompts to an LLM using LangChain.
-- Building a Streamlit application powered by Gemini.
-- Difference between LLM and Chat Model.
-- Managing API keys using `.env`.
-- Running projects inside a virtual environment (`venv`).
+- What a prompt is
+- Importance of prompt engineering
+- Static prompts
+- Dynamic prompts
+- PromptTemplate
+- Prompt components
+- Building Streamlit applications with LangChain
+- Difference between LLMs and Chat Models
+- Managing API keys using `.env`
+- Working with virtual environments (`venv`)
 
 ---
 
 # Key Takeaways
 
-- A prompt is the instruction given to an LLM.
+- Prompts determine how an LLM behaves.
 - Better prompts generally produce better outputs.
-- LangChain provides a simple interface to interact with LLMs.
-- Streamlit can quickly build an interactive UI for LLM applications.
-- Chat Models are recommended for most modern LangChain projects.
+- Static prompts are simple but less flexible.
+- Dynamic prompts improve consistency and scalability.
+- PromptTemplate is used to generate prompts dynamically.
+- Chat Models are recommended for modern LangChain applications.
 
 ---
 
@@ -239,28 +349,42 @@ Although both may produce similar responses, **Chat Models are preferred for mod
 
 ### What is a prompt?
 
-A prompt is the input or instruction provided to an LLM to generate a response.
+A prompt is the instruction or input given to an LLM to generate a response.
 
 ---
 
-### Why are prompts important?
+### What is Prompt Engineering?
 
-They determine the quality, relevance, and structure of the model's output.
+Prompt Engineering is the process of designing effective prompts to improve the quality and reliability of an LLM's output.
+
+---
+
+### What is the difference between a static prompt and a dynamic prompt?
+
+A static prompt is fixed and written manually by the user.
+
+A dynamic prompt is generated using a template and user-provided values.
+
+---
+
+### Why do we use PromptTemplate?
+
+PromptTemplate allows developers to create reusable, maintainable, and consistent prompts by replacing placeholders with runtime values.
 
 ---
 
 ### What is the difference between an LLM and a Chat Model?
 
-An LLM works with plain text input/output, whereas a Chat Model works with conversational messages and supports multi-turn interactions.
+An LLM works with plain text input/output, while a Chat Model works with conversational messages and supports multi-turn interactions.
 
 ---
 
 ### Which interface should be preferred in LangChain?
 
-For modern applications, `ChatGoogleGenerativeAI` (or other chat models) is generally preferred because it integrates well with Prompt Templates, LCEL, Chains, RAG, and Agents.
+For most modern applications, `ChatGoogleGenerativeAI` (or other chat models) should be preferred because it integrates well with Prompt Templates, LCEL, Chains, RAG, and Agents.
 
 ---
 
 ### What does `model.invoke()` do?
 
-It sends the input prompt to the model and returns the generated response.
+It sends the prompt to the model and returns the generated response.
