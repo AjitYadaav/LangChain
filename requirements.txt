@@ -8,6 +8,7 @@ openai
 
 #Anthropic Integration
 langchain-anthropic
+#google gemini
 langchain-google-genai
 
 #Hugging Face Integration
@@ -23,4 +24,5 @@ scikit-learn
 
 dotenv
 
-pytorch
+# UI
+streamlit
